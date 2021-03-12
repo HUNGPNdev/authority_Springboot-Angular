@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+        <changeSet id="create-user" author="hungnp">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="user"/>
+                </not>
+            </preConditions>
+            <createTable tableName="user">
+                <column name="id" type="BINARY(16)" />
+                <column name="name" type="VARCHAR(40)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="email" type="VARCHAR(255)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="username" type="VARCHAR(255)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="password" type="VARCHAR(255)">
+                    <constraints nullable="false"/>
+                </column>
+            </createTable>
+            <addPrimaryKey tableName="user" columnNames="id" constraintName="pk_user" />
+        </changeSet>
+        <changeSet id="create-role" author="hungnp">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="role"/>
+                </not>
+            </preConditions>
+            <createTable tableName="role">
+                <column name="id" type="BINARY(16)" />
+                <column name="name" type="VARCHAR(50)">
+                    <constraints nullable="false"/>
+                </column>
+            </createTable>
+            <addPrimaryKey tableName="role" columnNames="id" constraintName="pk_role"/>
+        </changeSet>
+        <changeSet id="create-user-role" author="hungnp">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="user_role"/>
+                </not>
+            </preConditions>
+            <createTable tableName="user_role">
+                <column name="user_id" type="BINARY(16)" />
+                <column name="role_id" type="BINARY(16)" />
+            </createTable>
+            <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="user_id" constraintName="fk_userrole_user" referencedTableName="user"
+                                     referencedColumnNames="id" />
+            <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="role_id" constraintName="fk_userrole_role" referencedTableName="role"
+                                     referencedColumnNames="id" />
+        </changeSet>
+</databaseChangeLog>
